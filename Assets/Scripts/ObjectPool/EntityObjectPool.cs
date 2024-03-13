@@ -8,6 +8,7 @@ public class EntityObjectPool : MonoBehaviour
     public static List<Transform> enemiesSpawnedTransform;
     public static Dictionary<int, GameObject> enemyPrefabs;
     public static Dictionary<int, Queue<Enemy>> enemyObjectPools;
+    public static Dictionary<Transform, Enemy> enemyTransformPairs;
 
     private static bool IsInitialized;
 
@@ -15,6 +16,7 @@ public class EntityObjectPool : MonoBehaviour
     {
         if(!IsInitialized)
         {
+            enemyTransformPairs = new Dictionary<Transform, Enemy>();
             enemyPrefabs = new Dictionary<int, GameObject>();
             enemyObjectPools = new Dictionary<int, Queue<Enemy>>();
             enemiesSpawned = new List<Enemy>();
@@ -63,6 +65,10 @@ public class EntityObjectPool : MonoBehaviour
         {
             enemiesSpawnedTransform.Add(enemyInstance.transform);
         }
+        if (!enemyTransformPairs.ContainsKey(enemyInstance.transform))
+        {
+            enemyTransformPairs.Add(enemyInstance.transform, enemyInstance);
+        }
         enemyInstance.id = enemyID;
         return enemyInstance;
     }
@@ -73,5 +79,6 @@ public class EntityObjectPool : MonoBehaviour
         enemyToRemove.gameObject.SetActive(false);
         enemiesSpawnedTransform.Remove(enemyToRemove.transform);
         enemiesSpawned.Remove(enemyToRemove);
+        enemyTransformPairs.Remove(enemyToRemove.transform);
     }
 }
