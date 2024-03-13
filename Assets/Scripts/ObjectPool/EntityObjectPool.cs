@@ -55,8 +55,14 @@ public class EntityObjectPool : MonoBehaviour
         {
             return null;
         }
-        enemiesSpawnedTransform.Add(enemyInstance.transform);
-        enemiesSpawned.Add(enemyInstance);
+        if(!enemiesSpawned.Contains(enemyInstance))
+        {
+            enemiesSpawned.Add(enemyInstance);
+        }
+        if (!enemiesSpawnedTransform.Contains(enemyInstance.transform))
+        {
+            enemiesSpawnedTransform.Add(enemyInstance.transform);
+        }
         enemyInstance.id = enemyID;
         return enemyInstance;
     }

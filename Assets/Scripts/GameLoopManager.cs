@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Jobs;
 
 public class GameLoopManager : MonoBehaviour
 {
+    private static Queue<EnemyDamageData> DamageData;
+    public static List<TowerBehaviour> towersInGame;
     public static Vector3[] nodePositions;
+    public static float[] nodeDistances;
+
     private static Queue<Enemy> enemiesToRemove;
     private static Queue<int> enemyIDsToPool;
 
@@ -16,6 +21,8 @@ public class GameLoopManager : MonoBehaviour
 
     void Start()
     {
+        DamageData = new Queue<EnemyDamageData>();
+        towersInGame = new List<TowerBehaviour>();
         enemyIDsToPool = new Queue<int>();
         enemiesToRemove = new Queue<Enemy>();
         EntityObjectPool.Init();
@@ -23,6 +30,12 @@ public class GameLoopManager : MonoBehaviour
         for (int i = 0; i < nodePositions.Length; i++)
         {
             nodePositions[i] = nodeParent.GetChild(i).position;
+        }
+
+        nodeDistances = new float[nodePositions.Length - 1];
+        for (int i = 0; i < nodeDistances.Length; i++)
+        {
+            nodeDistances[i] = Vector3.Distance(nodePositions[i], nodePositions[i + 1]);
         }
 
         StartCoroutine(GameLoop());
@@ -40,45 +53,79 @@ public class GameLoopManager : MonoBehaviour
         {
             AddEnemies();
 
-            NativeArray<Vector3> nodeToUse = new NativeArray<Vector3>(nodePositions, Allocator.TempJob);
-            NativeArray<int> nodeIndices = new NativeArray<int>(EntityObjectPool.enemiesSpawned.Count, Allocator.TempJob);
-            NativeArray<float> enemySpeeds = new NativeArray<float>(EntityObjectPool.enemiesSpawned.Count, Allocator.TempJob);
-            TransformAccessArray enemyAccess = new TransformAccessArray(EntityObjectPool.enemiesSpawnedTransform.ToArray(), 2);
-            for (int i = 0; i < EntityObjectPool.enemiesSpawned.Count; i++)
-            {
-                enemySpeeds[i] = EntityObjectPool.enemiesSpawned[i].enemySO.enemyLevels[EntityObjectPool.enemiesSpawned[i].level].Speed;
-                nodeIndices[i] = EntityObjectPool.enemiesSpawned[i].nodeIndex;
-            }
+            MoveEnemies();
 
-            MoveEnemiesJob moveEnemies = new MoveEnemiesJob
-            {
-                nodePositions = nodeToUse,
-                enemySpeed = enemySpeeds,
-                nodeIndex = nodeIndices,
-                deltaTime = Time.deltaTime
-            };
+            TowerTick();
 
-            JobHandle moveJobHandle = moveEnemies.Schedule(enemyAccess);
-            moveJobHandle.Complete();
-
-            for (int i = 0; i < EntityObjectPool.enemiesSpawned.Count; i++)
+            if (DamageData.Count > 0)
             {
-                EntityObjectPool.enemiesSpawned[i].nodeIndex = nodeIndices[i];
-                if(EntityObjectPool.enemiesSpawned[i].nodeIndex == nodePositions.Length)
+                for (int i = 0; i < DamageData.Count; i++)
                 {
-                    EnqueueEnemyToRemove(EntityObjectPool.enemiesSpawned[i]);
+                    EnemyDamageData currentDamageData = DamageData.Dequeue();
+                    currentDamageData.targetedEnemy.health -= currentDamageData.totalDamage / currentDamageData.resistance;
+                    if(currentDamageData.targetedEnemy.health <= 0)
+                    {
+                        EnqueueEnemyToRemove(currentDamageData.targetedEnemy);
+                    }
                 }
             }
-
-            enemySpeeds.Dispose();
-            nodeIndices.Dispose();
-            enemyAccess.Dispose();
-            nodeToUse.Dispose();
 
             RemoveEnemies();
 
             yield return null;
         }
+    }
+
+    public static void EnqueueDamageData(EnemyDamageData damageData)
+    {
+        DamageData.Enqueue(damageData);
+    }
+
+    private static void TowerTick()
+    {
+        foreach (var tower in towersInGame)
+        {
+            tower.target = TowerTargeting.GetTarget(tower, TowerTargeting.TargetType.first);
+            tower.Tick();
+        }
+    }
+
+    private static void MoveEnemies()
+    {
+        NativeArray<Vector3> nodeToUse = new NativeArray<Vector3>(nodePositions, Allocator.TempJob);
+        NativeArray<int> nodeIndices = new NativeArray<int>(EntityObjectPool.enemiesSpawned.Count, Allocator.TempJob);
+        NativeArray<float> enemySpeeds = new NativeArray<float>(EntityObjectPool.enemiesSpawned.Count, Allocator.TempJob);
+        TransformAccessArray enemyAccess = new TransformAccessArray(EntityObjectPool.enemiesSpawnedTransform.ToArray(), 2);
+        for (int i = 0; i < EntityObjectPool.enemiesSpawned.Count; i++)
+        {
+            enemySpeeds[i] = EntityObjectPool.enemiesSpawned[i].enemySO.enemyLevels[EntityObjectPool.enemiesSpawned[i].level].Speed;
+            nodeIndices[i] = EntityObjectPool.enemiesSpawned[i].nodeIndex;
+        }
+
+        MoveEnemiesJob moveEnemies = new MoveEnemiesJob
+        {
+            nodePositions = nodeToUse,
+            enemySpeed = enemySpeeds,
+            nodeIndex = nodeIndices,
+            deltaTime = Time.deltaTime
+        };
+
+        JobHandle moveJobHandle = moveEnemies.Schedule(enemyAccess);
+        moveJobHandle.Complete();
+
+        for (int i = 0; i < EntityObjectPool.enemiesSpawned.Count; i++)
+        {
+            EntityObjectPool.enemiesSpawned[i].nodeIndex = nodeIndices[i];
+            if (EntityObjectPool.enemiesSpawned[i].nodeIndex == nodePositions.Length)
+            {
+                EnqueueEnemyToRemove(EntityObjectPool.enemiesSpawned[i]);
+            }
+        }
+
+        enemySpeeds.Dispose();
+        nodeIndices.Dispose();
+        enemyAccess.Dispose();
+        nodeToUse.Dispose();
     }
 
     private static void RemoveEnemies()
@@ -112,6 +159,20 @@ public class GameLoopManager : MonoBehaviour
     {
         enemiesToRemove.Enqueue(enemyToRemove);
     }
+}
+
+public struct EnemyDamageData
+{
+    public EnemyDamageData(Enemy target, float damage, float resistance)
+    {
+        targetedEnemy = target;
+        totalDamage = damage;
+        this.resistance = resistance;
+    }
+
+    public Enemy targetedEnemy;
+    public float totalDamage;
+    public float resistance;
 }
 
 public struct MoveEnemiesJob : IJobParallelForTransform
