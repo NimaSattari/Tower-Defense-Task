@@ -14,4 +14,5 @@ public class EnemyLevel
     public int level;
     public float MaxHealth;
     public float Speed;
+    public float DamageResistance;
 }
