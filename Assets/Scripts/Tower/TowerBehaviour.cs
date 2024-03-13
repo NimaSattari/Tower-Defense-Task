@@ -29,7 +29,7 @@ public class TowerBehaviour : MonoBehaviour
         currentDamage.DamageTick(target);
         if(target != null)
         {
-            towerPivot.transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+            towerPivot.transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position - new Vector3(0, +1.5f, 0));
         }
     }
 

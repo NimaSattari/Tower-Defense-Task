@@ -49,6 +49,7 @@ MonoBehaviour:
   enemySO: {fileID: 11400000, guid: 01188f070a60d4f48869cbbe11390236, type: 2}
   level: 1
   health: 0
+  damageResistance: 0
   id: 0
   nodeIndex: 0
 --- !u!65 &3856414473173594350
@@ -62,7 +63,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 1, z: 0.5}
+  m_Size: {x: 0.3, y: 0.8, z: 0.3}
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1001 &2646812949704282355
 PrefabInstance:
