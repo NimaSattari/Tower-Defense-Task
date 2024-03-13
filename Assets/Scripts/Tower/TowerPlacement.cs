@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TowerPlacement : MonoBehaviour
@@ -7,15 +8,10 @@ public class TowerPlacement : MonoBehaviour
     [SerializeField] private LayerMask placementCheckMask;
     [SerializeField] private LayerMask placementColliderMask;
     [SerializeField] private Camera playerCamera;
+    [SerializeField] private PlayerStats playerStats;
+
     private GameObject currentPlacingTower;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if(currentPlacingTower != null)
@@ -42,7 +38,9 @@ public class TowerPlacement : MonoBehaviour
                     Vector3 halfExtents = towerCollider.size / 2;
                     if (Physics.CheckBox(boxCenter, halfExtents, Quaternion.identity, placementCheckMask, QueryTriggerInteraction.Ignore))
                     {
-                        GameLoopManager.towersInGame.Add(currentPlacingTower.GetComponent<TowerBehaviour>());
+                        TowerBehaviour currentTowerBehaviour = currentPlacingTower.GetComponent<TowerBehaviour>();
+                        GameLoopManager.towersInGame.Add(currentTowerBehaviour);
+                        playerStats.AddMoney(-currentTowerBehaviour.cost);
                         towerCollider.isTrigger = false;
                         currentPlacingTower = null;
                     }
@@ -53,6 +51,11 @@ public class TowerPlacement : MonoBehaviour
 
     public void SetTowerToPlace(GameObject tower)
     {
-        currentPlacingTower = Instantiate(tower);
+        int towerCost = tower.GetComponent<TowerBehaviour>().cost;
+
+        if(playerStats.GetMoney()>= towerCost)
+        {
+            currentPlacingTower = Instantiate(tower);
+        }
     }
 }

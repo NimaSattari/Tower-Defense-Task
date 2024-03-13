@@ -10,6 +10,7 @@ public class TowerBehaviour : MonoBehaviour
     public Enemy target;
     public Transform towerPivot;
     public float damage, fireRate, range;
+    public int cost;
 
     private float delay;
 

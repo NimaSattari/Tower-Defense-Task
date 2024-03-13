@@ -55,6 +55,7 @@ MonoBehaviour:
   damage: 50
   fireRate: 2
   range: 5
+  cost: 50
 --- !u!114 &1524736166249898609
 MonoBehaviour:
   m_ObjectHideFlags: 0

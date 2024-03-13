@@ -16,6 +16,8 @@ public class GameLoopManager : MonoBehaviour
     private static Queue<Enemy> enemiesToRemove;
     private static Queue<int> enemyIDsToPool;
 
+    [SerializeField] private PlayerStats playerStats;
+
     public Transform nodeParent;
     public bool loopShouldEnd;
 
@@ -57,22 +59,31 @@ public class GameLoopManager : MonoBehaviour
 
             TowerTick();
 
-            if (DamageData.Count > 0)
+            DamageEnemies();
+
+            RemoveEnemies();
+
+            yield return null;
+        }
+    }
+
+    private void DamageEnemies()
+    {
+        if (DamageData.Count > 0)
+        {
+            for (int i = 0; i < DamageData.Count; i++)
             {
-                for (int i = 0; i < DamageData.Count; i++)
+                EnemyDamageData currentDamageData = DamageData.Dequeue();
+                currentDamageData.targetedEnemy.health -= currentDamageData.totalDamage / currentDamageData.resistance;
+                playerStats.AddMoney((int)currentDamageData.totalDamage);
+                if (currentDamageData.targetedEnemy.health <= 0)
                 {
-                    EnemyDamageData currentDamageData = DamageData.Dequeue();
-                    currentDamageData.targetedEnemy.health -= currentDamageData.totalDamage / currentDamageData.resistance;
-                    if(currentDamageData.targetedEnemy.health <= 0)
+                    if (!enemiesToRemove.Contains(currentDamageData.targetedEnemy))
                     {
                         EnqueueEnemyToRemove(currentDamageData.targetedEnemy);
                     }
                 }
             }
-
-            RemoveEnemies();
-
-            yield return null;
         }
     }
 
