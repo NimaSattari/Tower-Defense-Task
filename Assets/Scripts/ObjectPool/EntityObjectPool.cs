@@ -11,6 +11,12 @@ public class EntityObjectPool : MonoBehaviour
     public static Dictionary<Transform, Enemy> enemyTransformPairs;
 
     private static bool IsInitialized;
+    private static EntityObjectPool instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     public static void Init()
     {
@@ -75,6 +81,13 @@ public class EntityObjectPool : MonoBehaviour
 
     public static void RemoveEnemy(Enemy enemyToRemove)
     {
+        instance.StartCoroutine(instance.RemoveEnemyCoroutine(enemyToRemove));
+    }
+
+    private IEnumerator RemoveEnemyCoroutine(Enemy enemyToRemove)
+    {
+        enemyToRemove.Die();
+        yield return new WaitForSeconds(1);
         enemyObjectPools[enemyToRemove.id].Enqueue(enemyToRemove);
         enemyToRemove.gameObject.SetActive(false);
         enemiesSpawnedTransform.Remove(enemyToRemove.transform);

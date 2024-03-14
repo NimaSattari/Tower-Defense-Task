@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 263738455883999113}
   - component: {fileID: 690238697635585832}
   - component: {fileID: 1027091112322508544}
+  - component: {fileID: 5368336376018044745}
   m_Layer: 6
   m_Name: TowerMissile
   m_TagString: NoTower
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1568931892925553887}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1573429760687054133}
@@ -47,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 311a013e5a27ed448a50e95bc6fc4487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  placementAnim: {fileID: 5368336376018044745}
   enemiesLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -86,6 +88,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &5368336376018044745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568931892925553887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61d95bcf8e659d844b7d7365b85cd6a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationType: 2
+  animationDuration: 1
+  loopDelay: 0
+  doOnStart: 0
+  oneLoop: 0
+  infiniteLoop: 0
+  animationEase: 24
+  targetLocation: {x: 0, y: 0, z: 0}
+  targetSize: {x: 1, y: 1, z: 1}
+  targetRotation: {x: 0, y: 0, z: 0}
 --- !u!1001 &1568931892168298751
 PrefabInstance:
   m_ObjectHideFlags: 0

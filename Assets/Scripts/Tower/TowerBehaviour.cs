@@ -1,3 +1,4 @@
+using Neu.Animations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(IDamage))]
 public class TowerBehaviour : MonoBehaviour
 {
+    [SerializeField] private DoTweenActions placementAnim;
     public LayerMask enemiesLayer;
 
     public Enemy target;
@@ -32,6 +34,11 @@ public class TowerBehaviour : MonoBehaviour
         {
             towerPivot.transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position - new Vector3(0, +1.5f, 0));
         }
+    }
+
+    public void PlacementAnim()
+    {
+        placementAnim.DoAnimation();
     }
 
     private void OnDrawGizmos()

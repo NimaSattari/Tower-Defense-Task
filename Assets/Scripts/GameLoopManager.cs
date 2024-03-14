@@ -80,7 +80,6 @@ public class GameLoopManager : MonoBehaviour
                     if (!enemiesToRemove.Contains(currentDamageData.targetedEnemy))
                     {
                         playerStats.AddMoney(currentDamageData.targetedEnemy.reward);
-                        currentDamageData.targetedEnemy.Die();
                         EnqueueEnemyToRemove(currentDamageData.targetedEnemy);
                     }
                 }

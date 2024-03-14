@@ -1,3 +1,4 @@
+using Neu.Animations;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -39,6 +40,7 @@ public class TowerPlacement : MonoBehaviour
                     if (Physics.CheckBox(boxCenter, halfExtents, Quaternion.identity, placementCheckMask, QueryTriggerInteraction.Ignore))
                     {
                         TowerBehaviour currentTowerBehaviour = currentPlacingTower.GetComponent<TowerBehaviour>();
+                        currentTowerBehaviour.PlacementAnim();
                         GameLoopManager.towersInGame.Add(currentTowerBehaviour);
                         playerStats.AddMoney(-currentTowerBehaviour.cost);
                         towerCollider.isTrigger = false;
