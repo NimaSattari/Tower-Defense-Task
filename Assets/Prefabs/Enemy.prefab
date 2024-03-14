@@ -46,10 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d13b319d3907d7245a92f5efecb12423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dieAnim: {fileID: 0}
   enemySO: {fileID: 11400000, guid: 01188f070a60d4f48869cbbe11390236, type: 2}
   level: 1
-  health: 0
-  damageResistance: 0
   id: 0
   nodeIndex: 0
 --- !u!65 &3856414473173594350

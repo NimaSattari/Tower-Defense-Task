@@ -16,6 +16,10 @@ MonoBehaviour:
   - level: 1
     MaxHealth: 100
     Speed: 1
+    DamageResistance: 0
+    reward: 100
   - level: 2
     MaxHealth: 150
     Speed: 2
+    DamageResistance: 20
+    reward: 200
