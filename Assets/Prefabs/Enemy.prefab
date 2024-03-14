@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2646812950802591195}
   - component: {fileID: 2646812950802591194}
   - component: {fileID: 3856414473173594350}
+  - component: {fileID: 6085418208450417322}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: NoTower
@@ -46,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d13b319d3907d7245a92f5efecb12423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dieAnim: {fileID: 0}
+  dieAnim: {fileID: 6085418208450417322}
   enemySO: {fileID: 11400000, guid: 01188f070a60d4f48869cbbe11390236, type: 2}
   level: 1
   id: 0
@@ -64,6 +65,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.3, y: 0.8, z: 0.3}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &6085418208450417322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2646812950802591193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61d95bcf8e659d844b7d7365b85cd6a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationType: 2
+  animationDuration: 1
+  loopDelay: 0
+  doOnStart: 0
+  oneLoop: 0
+  infiniteLoop: 0
+  animationEase: 29
+  targetLocation: {x: 0, y: 0, z: 0}
+  targetSize: {x: 0.1, y: 0.1, z: 0.1}
+  targetRotation: {x: 0, y: 0, z: 0}
 --- !u!1001 &2646812949704282355
 PrefabInstance:
   m_ObjectHideFlags: 0

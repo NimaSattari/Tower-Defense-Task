@@ -4492,7 +4492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationType: 2
-  animationDuration: 0.25
+  animationDuration: 0.5
   loopDelay: 0
   doOnStart: 0
   oneLoop: 0

@@ -21,7 +21,7 @@ public class PlayerStats : MonoBehaviour
     {
         currentMoney += moneyToAdd;
         moneyText.SetText($"${currentMoney}");
-        moneyAnim.OneLoop();
+        StartCoroutine(moneyAnim.OneLoop());
     }
 
     public int GetMoney()

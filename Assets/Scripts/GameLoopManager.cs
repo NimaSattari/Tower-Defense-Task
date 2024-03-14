@@ -75,11 +75,12 @@ public class GameLoopManager : MonoBehaviour
             {
                 EnemyDamageData currentDamageData = DamageData.Dequeue();
                 currentDamageData.targetedEnemy.health -= currentDamageData.totalDamage / currentDamageData.resistance;
-                playerStats.AddMoney((int)currentDamageData.totalDamage);
                 if (currentDamageData.targetedEnemy.health <= 0)
                 {
                     if (!enemiesToRemove.Contains(currentDamageData.targetedEnemy))
                     {
+                        playerStats.AddMoney(currentDamageData.targetedEnemy.reward);
+                        currentDamageData.targetedEnemy.Die();
                         EnqueueEnemyToRemove(currentDamageData.targetedEnemy);
                     }
                 }

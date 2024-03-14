@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1524736166249898609}
   - component: {fileID: 1027091112322508544}
   m_Layer: 6
-  m_Name: Tower
+  m_Name: TowerBasic
   m_TagString: NoTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
   target: {fileID: 0}
   towerPivot: {fileID: 1570414776058197795}
   damage: 50
-  fireRate: 2
+  fireRate: 1
   range: 5
   cost: 50
 --- !u!114 &1524736166249898609
@@ -112,22 +112,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 4165866241402844, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4165866241402844, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4165866241402844, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.94
-      objectReference: {fileID: 0}
-    - target: {fileID: 4165866241402844, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.25
-      objectReference: {fileID: 0}
     - target: {fileID: 4420940651482308, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.93111676
@@ -158,19 +142,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4509344712265162, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 4509344712265162, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4509344712265162, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 4509344712265162, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4509344712265162, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 114231757648547274, guid: 997eda0f844715845a30121b4553e2fd, type: 3}
       propertyPath: Towerbug
