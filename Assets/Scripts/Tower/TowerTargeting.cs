@@ -23,8 +23,8 @@ public class TowerTargeting
         NativeArray<EnemyData> enemiesToCalculate = new NativeArray<EnemyData>(enemiesInRange.Length, Allocator.TempJob);
         NativeArray<Vector3> nodePositions = new NativeArray<Vector3>(GameLoopManager.nodePositions, Allocator.TempJob);
         NativeArray<float> nodeDistances = new NativeArray<float>(GameLoopManager.nodeDistances, Allocator.TempJob);
-        NativeArray<int> enemyToIndex = new NativeArray<int>(new int[] { -1 }, Allocator.TempJob);
-        int enemyIndexToReturn = -1;
+        NativeArray<int> enemyToIndex = new NativeArray<int>(1, Allocator.TempJob);
+        int enemyIndexToReturn = 0;
 
         for (int i = 0; i < enemiesToCalculate.Length; i++)
         {
@@ -60,24 +60,14 @@ public class TowerTargeting
         JobHandle searchHandle = searchForEnemy.Schedule(enemiesToCalculate.Length, dependency);
         searchHandle.Complete();
 
-        if (enemyToIndex[0] != -1)
-        {
-            enemyIndexToReturn = enemiesToCalculate[enemyToIndex[0]].enemyIndex;
-
-            enemiesToCalculate.Dispose();
-            nodeDistances.Dispose();
-            nodePositions.Dispose();
-            enemyToIndex.Dispose();
-
-            return EntityObjectPool.enemiesSpawned[enemyIndexToReturn];
-        }
+        enemyIndexToReturn = enemyToIndex[0];
 
         enemiesToCalculate.Dispose();
         nodeDistances.Dispose();
         nodePositions.Dispose();
         enemyToIndex.Dispose();
 
-        return null;
+        return EntityObjectPool.enemiesSpawned[enemyIndexToReturn];
     }
 
     struct EnemyData
